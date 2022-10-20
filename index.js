@@ -1,5 +1,6 @@
 import Express from 'express';
 import multer from 'multer';
+import cors from 'cors';
 
 import mongoose from 'mongoose';
 
@@ -34,6 +35,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(Express.json());
+app.use(cors());
 app.use('/uploads', Express.static('uploads'));
 
 app.post(
@@ -56,7 +58,10 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
   });
 });
 
+app.get('/tags', PostController.getLastTags);
+
 app.get('/posts', PostController.getAll);
+app.get('/posts/tags', PostController.getLastTags);
 app.get('/posts/:id', PostController.getOne);
 app.post(
   '/posts',
